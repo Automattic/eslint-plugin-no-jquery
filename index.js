@@ -13,8 +13,9 @@ function isJQuery(node) {
 				break
 			case 'Identifier':
 				id = node
+				node = null
 			default:
-				id = null
+				node = null
 		}
 	}
 
@@ -27,11 +28,15 @@ const noJqueryRule = {
 		schema: []
 	},
 	create: function( context ) {
-		if (isJQuery(node)) {
-			context.report({
-				node: node,
-				message: 'Don\'t use jQuery'
-			})
+		return {
+			CallExpression: function (node) {
+				if (isJQuery(node)) {
+					context.report({
+						node: node,
+						message: 'Don\'t use jQuery'
+					})
+				}
+			}
 		}
 	}
 }
